@@ -1,6 +1,53 @@
 <script lang="ts" setup>
+  import { useRouter } from 'vue-router'
   import HeaderLayout from './HeaderLayout.vue'
+
+  const router = useRouter()
+
+  const menuItems = [
+    {
+      title: 'Navigator One',
+      icon: 'message',
+      subItems: [
+        { label: 'Option 1', route: 'hello', icon: 'User' },
+        { label: 'Option 2', route: 'dashboard', icon: 'User' }
+      ]
+    },
+    {
+      title: 'Navigator Three',
+      icon: 'setting',
+      subItems: [
+        { label: 'Option 1', route: 'hello', icon: 'User' },
+        { label: 'Option 2', route: 'dashboard', icon: 'User' },
+        { label: 'Option 3', route: 'hello', icon: 'User' }
+      ]
+    },
+    {
+      title: 'Documentation',
+      icon: 'Cloudy',
+      route: 'documentation'
+    },
+    {
+      title: 'Settings',
+      icon: 'Collection',
+      route: 'settings'
+    },
+    {
+      title: 'Settings',
+      icon: 'Collection',
+      route: 'settings'
+    },
+    {
+      title: 'Help',
+      icon: 'help',
+      subItems: [
+        { label: 'FAQ', route: 'faq', icon: 'help' },
+        { label: 'Contact Support', route: 'support', icon: 'Cloudy' }
+      ]
+    }
+  ]
 </script>
+
 <template>
   <div class="common-layout">
     <el-container>
@@ -10,58 +57,39 @@
       <el-container>
         <el-aside width="200px">
           <el-scrollbar>
-            <el-menu :default-openeds="['1', '3']">
-              <el-sub-menu index="1">
-                <template #title>
-                  <el-icon><message /></el-icon>Navigator One
-                </template>
-                <el-menu-item-group>
-                  <template #title>Group 1</template>
-                  <el-menu-item index="1-1">Option 1</el-menu-item>
-                  <el-menu-item index="1-2">Option 2</el-menu-item>
-                </el-menu-item-group>
-                <el-menu-item-group title="Group 2">
-                  <el-menu-item index="1-3">Option 3</el-menu-item>
-                </el-menu-item-group>
-                <el-sub-menu index="1-4">
-                  <template #title>Option4</template>
-                  <el-menu-item index="1-4-1">Option 4-1</el-menu-item>
+            <el-menu :default-openeds="['0']">
+              <template v-for="(menu, index) in menuItems" :key="index">
+                <el-sub-menu v-if="menu.subItems" :index="index.toString()">
+                  <template #title>
+                    <el-icon><component :is="menu.icon" /></el-icon
+                    >{{ menu.title }}
+                  </template>
+                  <el-menu-item-group>
+                    <template
+                      v-for="(item, subIndex) in menu.subItems"
+                      :key="subIndex"
+                    >
+                      <el-menu-item
+                        :index="`${index}-${subIndex}`"
+                        @click="() => router.replace({ name: item.route })"
+                      >
+                        <el-icon
+                          ><component :is="menu.subItems[subIndex].icon"
+                        /></el-icon>
+                        {{ item.label }}
+                      </el-menu-item>
+                    </template>
+                  </el-menu-item-group>
                 </el-sub-menu>
-              </el-sub-menu>
-              <el-sub-menu index="2">
-                <template #title>
-                  <el-icon><icon-menu /></el-icon>Navigator Two
-                </template>
-                <el-menu-item-group>
-                  <template #title>Group 1</template>
-                  <el-menu-item index="2-1">Option 1</el-menu-item>
-                  <el-menu-item index="2-2">Option 2</el-menu-item>
-                </el-menu-item-group>
-                <el-menu-item-group title="Group 2">
-                  <el-menu-item index="2-3">Option 3</el-menu-item>
-                </el-menu-item-group>
-                <el-sub-menu index="2-4">
-                  <template #title>Option 4</template>
-                  <el-menu-item index="2-4-1">Option 4-1</el-menu-item>
-                </el-sub-menu>
-              </el-sub-menu>
-              <el-sub-menu index="3">
-                <template #title>
-                  <el-icon><setting /></el-icon>Navigator Three
-                </template>
-                <el-menu-item-group>
-                  <template #title>Group 1</template>
-                  <el-menu-item index="3-1">Option 1</el-menu-item>
-                  <el-menu-item index="3-2">Option 2</el-menu-item>
-                </el-menu-item-group>
-                <el-menu-item-group title="Group 2">
-                  <el-menu-item index="3-3">Option 3</el-menu-item>
-                </el-menu-item-group>
-                <el-sub-menu index="3-4">
-                  <template #title>Option 4</template>
-                  <el-menu-item index="3-4-1">Option 4-1</el-menu-item>
-                </el-sub-menu>
-              </el-sub-menu>
+                <el-menu-item
+                  v-else
+                  :index="index.toString()"
+                  @click="() => router.replace({ name: menu.route })"
+                >
+                  <el-icon><component :is="menu.icon" /></el-icon
+                  >{{ menu.title }}
+                </el-menu-item>
+              </template>
             </el-menu>
           </el-scrollbar>
         </el-aside>
@@ -72,4 +100,11 @@
     </el-container>
   </div>
 </template>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+  .el-menu-item.is-active {
+    background-color: #f4f6f9;
+  }
+  .el-sub-menu.is-opened {
+    background-color: #b3b5b9;
+  }
+</style>
