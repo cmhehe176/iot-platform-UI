@@ -43,6 +43,7 @@
               show-password
               placeholder="password"
               size="large"
+              @keyup.enter="onSubmit"
             />
           </el-form-item>
           <div class="button">

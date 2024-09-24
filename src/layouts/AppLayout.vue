@@ -1,25 +1,27 @@
 <script lang="ts" setup>
   import { useRouter } from 'vue-router'
   import HeaderLayout from './HeaderLayout.vue'
+  import { useAuthStore } from '@/stores/auth'
 
   const router = useRouter()
 
   const menuItems = [
     {
-      title: 'Navigator One',
-      icon: 'message',
+      title: 'Project',
+      icon: 'OfficeBuilding',
       subItems: [
-        { label: 'Option 1', route: 'hello', icon: 'User' },
+        { label: 'My Project', route: 'project', icon: 'SetUp' },
         { label: 'Option 2', route: 'dashboard', icon: 'User' }
       ]
     },
     {
       title: 'Navigator Three',
       icon: 'setting',
+      roleId: 1,
       subItems: [
-        { label: 'Option 1', route: 'hello', icon: 'User' },
+        { label: 'Option 1', route: 'project', icon: 'User' },
         { label: 'Option 2', route: 'dashboard', icon: 'User' },
-        { label: 'Option 3', route: 'hello', icon: 'User' }
+        { label: 'Option 3', route: 'project', icon: 'User' }
       ]
     },
     {
@@ -104,7 +106,8 @@
   .el-menu-item.is-active {
     background-color: #f4f6f9;
   }
+
   .el-sub-menu.is-opened {
-    background-color: #b3b5b9;
+    background-color: #e9eccf;
   }
 </style>

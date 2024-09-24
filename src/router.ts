@@ -25,8 +25,8 @@ const routes = [
     meta: { layout: AppLayout }
   },
   {
-    path: '/hello',
-    name: 'hello',
+    path: '/project',
+    name: 'project',
     component: Project,
     meta: { layout: AppLayout }
   }

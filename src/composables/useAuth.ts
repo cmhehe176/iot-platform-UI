@@ -11,6 +11,7 @@ export const useAuth = () => {
 
       if (response.data.accessToken) {
         localStorage.setItem('accessToken', response.data.accessToken)
+        await getProfile()
         ElMessage.success('Đăng nhập thành công!')
       }
 
@@ -36,8 +37,14 @@ export const useAuth = () => {
     }
   }
 
+  const LogOut = () => {
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('auth')
+  }
+
   return {
     Login,
-    getProfile
+    getProfile,
+    LogOut
   }
 }
