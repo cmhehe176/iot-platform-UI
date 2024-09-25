@@ -1,5 +1,6 @@
 import api from '@/common/api'
 import { useAuthStore } from '@/stores/auth'
+import { useProjectStore } from '@/stores/project'
 import { ElMessage } from 'element-plus'
 
 export const useAuth = () => {
@@ -38,6 +39,8 @@ export const useAuth = () => {
   }
 
   const LogOut = () => {
+    auth.$reset()
+    useProjectStore().$reset()
     localStorage.removeItem('accessToken')
     localStorage.removeItem('auth')
   }

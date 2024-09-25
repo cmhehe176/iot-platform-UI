@@ -1,3 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+  import { useRouter } from 'vue-router'
 
-<template>Home</template>
+  const router = useRouter()
+</script>
+
+<template>
+  <el-button @click="router.replace({ name: 'dashboard' })"
+    >Iot - platform</el-button
+  >
+</template>

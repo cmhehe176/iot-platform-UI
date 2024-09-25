@@ -1,5 +1,6 @@
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
+import { Roles } from '@/common/const'
 
 export const useAuthStore = defineStore(
   'auth',
@@ -10,7 +11,9 @@ export const useAuthStore = defineStore(
       user.value = data
     }
 
-    return { user, setUser }
+    const isAdmin = computed(() => user.value.profile.roleId === Roles.ADMIN)
+
+    return { user, setUser, isAdmin }
   },
   {
     persist: true

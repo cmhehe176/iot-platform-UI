@@ -6,13 +6,11 @@
   const auth = useAuthStore()
   const { LogOut } = useAuth()
   const router = useRouter()
-
-  const logout = () => {}
 </script>
 
 <template>
   <div class="container">
-    {{ auth.user.data.name }}
+    {{ auth.user.profile.name }}
     <button
       type="button"
       @click="

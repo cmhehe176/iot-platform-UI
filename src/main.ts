@@ -8,6 +8,7 @@ import App from './App.vue'
 import router from './router'
 
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+import { resetStore } from './stores/resetStore'
 
 const app = createApp(App)
 
@@ -17,7 +18,7 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 
 app.use(ElementPlus)
 
-app.use(createPinia().use(piniaPluginPersistedstate))
+app.use(createPinia().use(piniaPluginPersistedstate).use(resetStore))
 
 app.use(router)
 
