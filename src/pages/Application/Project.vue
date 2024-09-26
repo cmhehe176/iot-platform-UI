@@ -7,6 +7,7 @@
   import { useUserStore } from '@/stores/user'
   import { storeToRefs } from 'pinia'
   import { computed, onMounted, reactive } from 'vue'
+  import { useRouter } from 'vue-router'
 
   const auth = useAuthStore()
   const {
@@ -22,6 +23,7 @@
   const { projects } = storeToRefs(projectStore)
   const userStore = useUserStore()
   const { listUser } = storeToRefs(userStore)
+  const router = useRouter()
 
   onMounted(() => {
     getListpProjectByUser()
@@ -66,62 +68,67 @@
 </script>
 
 <template>
-  <button
-    v-if="auth.isAdmin"
-    type="button"
-    @click="
-      () => {
-        state.showForm = true
-        state.action = 'create'
-      }
-    "
-  >
-    add project
-  </button>
-  <el-space wrap size="large">
-    <el-card
-      v-for="(item, index) in projects"
-      :key="index"
-      class="card"
-      style="width: 250px; height: 200px"
+  <div class="space-card">
+    <el-button
+      v-if="auth.isAdmin"
+      type="button"
+      @click="
+        () => {
+          state.showForm = true
+          state.action = 'create'
+        }
+      "
+      size="large"
+      style="width: 250px"
     >
-      <template #header>
-        <div class="header" @click="() => console.log('eeds')">
-          <span>{{ item.project.name }}</span>
-          <div class="icon">
-            <el-icon
-              style="cursor: pointer"
-              @click.stop="
-                async () => {
-                  state.showForm = true
-                  state.projectId = item.project.id
-                  state.index = index
-                  state.action = 'edit'
-                  form.name = item.project.name
-                  form.description = item.project.description
-                  const users = await getListpUserOfProject(item.project.id)
-                  form.userIds = users.map((user: any) => user.id)
-                }
-              "
-              ><Edit
-            /></el-icon>
-            <el-icon
-              @click.stop="
-                () => {
-                  state.confirm = true
-                  state.projectId = item.project.id
-                }
-              "
-              ><DeleteFilled
-            /></el-icon>
+      Add Project
+    </el-button>
+    <el-space wrap size="large">
+      <el-card
+        v-for="(item, index) in projects"
+        :key="index"
+        class="card"
+        style="width: 250px; height: 200px"
+      >
+        <template #header>
+          <div class="header" @click="() => router.replace({ name: 'device' })">
+            <span>{{ item.project.name }}</span>
+            <div class="icon">
+              <el-icon
+                style="cursor: pointer"
+                @click.stop="
+                  async () => {
+                    state.showForm = true
+                    state.projectId = item.project.id
+                    state.index = index
+                    state.action = 'edit'
+                    form.name = item.project.name
+                    form.description = item.project.description
+                    const users = await getListpUserOfProject(item.project.id)
+                    form.userIds = users.map((user: any) => user.id)
+                  }
+                "
+                ><Edit
+              /></el-icon>
+              <el-icon
+                v-if="auth.isAdmin"
+                @click.stop="
+                  () => {
+                    state.confirm = true
+                    state.projectId = item.project.id
+                  }
+                "
+                ><DeleteFilled
+              /></el-icon>
+            </div>
           </div>
+        </template>
+        <div class="description">
+          {{ item.project.description }}
         </div>
-      </template>
-      <div class="description">
-        {{ item.project.description }}
-      </div>
-    </el-card>
-  </el-space>
+      </el-card>
+    </el-space>
+  </div>
   <el-dialog
     v-model="state.showForm"
     title="Project Detail "
@@ -184,8 +191,8 @@
       </div>
     </template>
   </el-dialog>
-  <el-dialog v-model="state.confirm" title="Tips" width="500">
-    <span>This is a message</span>
+  <el-dialog v-model="state.confirm" title="Confirm" width="250">
+    <span>Do you want to delete this Project ?</span>
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="state.confirm = false">Cancel</el-button>
@@ -205,6 +212,12 @@
 </template>
 
 <style lang="scss" scoped>
+  .space-card {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
   .card {
     width: 250px;
     height: 200px;

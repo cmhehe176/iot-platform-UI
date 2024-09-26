@@ -22,6 +22,23 @@ export const useAuth = () => {
     }
   }
 
+  const Register = async (data: {
+    name: string
+    email: string
+    telephone: string
+    password: string
+  }) => {
+    try {
+      const response = await api.post('/auth/register', data)
+
+      if (response) ElMessage.success('Đăng ký thành công!')
+
+      return response
+    } catch {
+      ElMessage.error('Email hoặc số điện thoại của bạn đã có người đăng ký  !')
+    }
+  }
+
   const getProfile = async () => {
     try {
       const response = await api.get('/auth')
@@ -48,6 +65,7 @@ export const useAuth = () => {
   return {
     Login,
     getProfile,
-    LogOut
+    LogOut,
+    Register
   }
 }

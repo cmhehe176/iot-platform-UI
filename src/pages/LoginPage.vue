@@ -1,20 +1,45 @@
 <script setup lang="ts">
-  import { reactive, ref } from 'vue'
+  import { reactive, ref, watch } from 'vue'
   import { useAuth } from '@/composables/useAuth'
   import { useRouter } from 'vue-router'
 
-  const { Login } = useAuth()
+  const { Login, Register } = useAuth()
   const router = useRouter()
 
-  const formRef = ref()
-  const form = reactive({
+  const stateLoginForm = ref(true)
+
+  const formLogin = reactive({
     username: '',
     password: ''
   })
 
+  const formRegister = reactive({
+    name: '',
+    email: '',
+    telephone: '',
+    password: ''
+  })
+
+  watch(
+    () => stateLoginForm.value,
+    () => {
+      formLogin.username = ''
+      formLogin.password = ''
+      formRegister.name = ''
+      formRegister.email = ''
+      formRegister.telephone = ''
+      formRegister.password = ''
+    }
+  )
+
   const onSubmit = () => {
-    Login(form).then((data) => {
-      if (data) router.replace({ name: 'dashboard' })
+    if (stateLoginForm.value)
+      return Login(formLogin).then((data) => {
+        if (data) router.replace({ name: 'dashboard' })
+      })
+
+    return Register(formRegister).then((data) => {
+      if (data) stateLoginForm.value = true
     })
   }
 </script>
@@ -27,18 +52,21 @@
           <img src="/images/aiot.png" />
         </el-avatar>
       </div>
-      <div class="input-login">
-        <el-form ref="formRef" :model="form" @submit.prevent>
+      <div
+        class="input-login"
+        :style="{ 'margin-top': stateLoginForm ? '10%' : '3%' }"
+      >
+        <el-form v-if="stateLoginForm" :model="formLogin" @submit.prevent>
           <el-form-item>
             <el-input
-              v-model="form.username"
+              v-model="formLogin.username"
               placeholder="email or telephone"
               size="large"
             />
           </el-form-item>
           <el-form-item>
             <el-input
-              v-model="form.password"
+              v-model="formLogin.password"
               type="password"
               show-password
               placeholder="password"
@@ -46,26 +74,66 @@
               @keyup.enter="onSubmit"
             />
           </el-form-item>
-          <div class="button">
-            <el-button type="button" round size="large" style="width: 50%" text>
-              Tạo tài khoản
-            </el-button>
-            <el-button
-              color="#a1bff0"
-              style="color: #626aef; width: 30%"
-              round
-              plain
-              size="large"
-              @click="onSubmit"
-              >Submit
-            </el-button>
-          </div>
-          <div class="footer">
-            <el-link href="" target="_blank" :underline="false" type="default">
-              Bạn quên tài khoản ?
-            </el-link>
-          </div>
         </el-form>
+        <el-form v-else :model="formRegister" @submit.prevent>
+          <el-form-item>
+            <el-input
+              v-model="formRegister.name"
+              placeholder="Input your name"
+              size="large"
+            />
+          </el-form-item>
+          <el-form-item>
+            <el-input
+              v-model="formRegister.telephone"
+              placeholder="Input your telephone"
+              size="large"
+            />
+          </el-form-item>
+          <el-form-item>
+            <el-input
+              v-model="formRegister.email"
+              placeholder="Input your email"
+              size="large"
+            />
+          </el-form-item>
+          <el-form-item>
+            <el-input
+              v-model="formRegister.password"
+              type="password"
+              show-password
+              placeholder="password"
+              size="large"
+              @keyup.enter="onSubmit"
+            />
+          </el-form-item>
+        </el-form>
+        <div class="button">
+          <el-button
+            type="button"
+            round
+            @click="stateLoginForm = !stateLoginForm"
+            size="large"
+            style="width: 50%"
+            text
+          >
+            {{ stateLoginForm ? 'Tạo tài khoản' : 'Quay lại đăng nhập' }}
+          </el-button>
+          <el-button
+            color="#a1bff0"
+            style="color: #626aef; width: 30%"
+            round
+            plain
+            size="large"
+            @click="onSubmit"
+            >Submit
+          </el-button>
+        </div>
+        <div class="footer">
+          <el-link href="" target="_blank" :underline="false" type="default">
+            Bạn quên tài khoản ?
+          </el-link>
+        </div>
       </div>
     </div>
   </div>
@@ -108,7 +176,7 @@
 
       .input-login {
         width: 40%;
-        margin: 10% 5%;
+        margin-right: 5%;
 
         .el-input {
           height: 50px;

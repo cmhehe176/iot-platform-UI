@@ -6,6 +6,7 @@ import AppLayout from './layouts/AppLayout.vue'
 import { useAuthStore } from './stores/auth'
 import { useAuth } from './composables/useAuth'
 import Project from './pages/Application/Project.vue'
+import Device from './pages/Application/Device.vue'
 
 const routes = [
   {
@@ -28,6 +29,12 @@ const routes = [
     path: '/project',
     name: 'project',
     component: Project,
+    meta: { layout: AppLayout }
+  },
+  {
+    path: '/device',
+    name: 'device',
+    component: Device,
     meta: { layout: AppLayout }
   }
 ]

@@ -1,28 +1,27 @@
 <script lang="ts" setup>
-  import { useRouter } from 'vue-router'
+  import { useRoute, useRouter } from 'vue-router'
   import HeaderLayout from './HeaderLayout.vue'
-  import { useAuthStore } from '@/stores/auth'
 
   const router = useRouter()
 
   const menuItems = [
     {
-      title: 'Project',
+      title: 'Project Management',
       icon: 'OfficeBuilding',
       subItems: [
         { label: 'Dashboard', route: 'dashboard', icon: 'Histogram' },
         { label: 'My Project', route: 'project', icon: 'SetUp' },
-        { label: 'My Project', route: 'project', icon: 'SetUp' }
+        { label: 'Device', route: 'device', icon: 'Iphone' }
       ]
     },
     {
-      title: 'Navigator Three',
+      title: 'Navigator',
       icon: 'setting',
       roleId: 1,
       subItems: [
-        { label: 'Option 1', route: 'project', icon: 'User' },
-        { label: 'Option 2', route: 'dashboard', icon: 'User' },
-        { label: 'Option 3', route: 'project', icon: 'User' }
+        { label: 'Option 1', route: '', icon: 'User' },
+        { label: 'Option 2', route: '', icon: 'User' },
+        { label: 'Option 3', route: '', icon: 'User' }
       ]
     },
     {
@@ -60,7 +59,7 @@
       <el-container>
         <el-aside width="200px">
           <el-scrollbar>
-            <el-menu :default-openeds="['0']">
+            <el-menu :default-openeds="['0', '1']">
               <template v-for="(menu, index) in menuItems" :key="index">
                 <el-sub-menu v-if="menu.subItems" :index="index.toString()">
                   <template #title>
