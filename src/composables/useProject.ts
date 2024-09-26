@@ -4,17 +4,17 @@ import { useAuth } from './useAuth'
 import { useProjectStore } from '@/stores/project'
 
 interface iProject {
-  id: number
-  userId?: number
-  name: string
-  description: string
+  userId?: number[]
+  name?: string
+  description?: string
 }
 
 export const useProject = () => {
   const projectStore = useProjectStore()
-  const updateProject = async (data: iProject) => {
+
+  const updateProject = async (projectId: number, data: iProject) => {
     try {
-      const response = await api.put('/project', data)
+      const response = await api.put(`/project/${projectId}`, data)
 
       if (response) ElMessage.success('Update Project success !')
 
@@ -67,10 +67,22 @@ export const useProject = () => {
     }
   }
 
+  const deleteProject = async (id: number) => {
+    try {
+      const response = await api.delete(`/project/${id}`)
+
+      if (response) ElMessage.success('Delete Project done')
+      await getListpProjectByUser()
+    } catch {
+      ElMessage.error('Delete Project failed !')
+    }
+  }
+
   return {
     updateProject,
     getListpProjectByUser,
     createProject,
-    getListpUserOfProject
+    getListpUserOfProject,
+    deleteProject
   }
 }

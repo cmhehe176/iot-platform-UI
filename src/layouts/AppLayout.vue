@@ -10,8 +10,9 @@
       title: 'Project',
       icon: 'OfficeBuilding',
       subItems: [
+        { label: 'Dashboard', route: 'dashboard', icon: 'Histogram' },
         { label: 'My Project', route: 'project', icon: 'SetUp' },
-        { label: 'Option 2', route: 'dashboard', icon: 'User' }
+        { label: 'My Project', route: 'project', icon: 'SetUp' }
       ]
     },
     {

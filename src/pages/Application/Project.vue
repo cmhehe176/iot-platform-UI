@@ -13,7 +13,8 @@
     updateProject,
     getListpProjectByUser,
     createProject,
-    getListpUserOfProject
+    getListpUserOfProject,
+    deleteProject
   } = useProject()
 
   const { getListUser } = useUser()
@@ -29,25 +30,28 @@
   })
 
   const state = reactive({
+    index: 0,
     showForm: false,
     projectId: 0,
-    action: ''
+    action: '',
+    confirm: false
   })
 
   const form = reactive({
     name: '',
     description: '',
-    userId: undefined
+    userIds: undefined
   })
 
   const clearForm = () => {
     state.showForm = false
     state.projectId = 0
     state.action = ''
+    state.index = 0
     Object.assign(form, {
       name: '',
       description: '',
-      userId: undefined
+      userIds: undefined
     })
   }
 
@@ -84,21 +88,33 @@
       <template #header>
         <div class="header" @click="() => console.log('eeds')">
           <span>{{ item.project.name }}</span>
-          <el-icon
-            style="cursor: pointer"
-            @click.stop="
-              async () => {
-                state.showForm = true
-                state.projectId = index
-                state.action = 'edit'
-                form.name = item.project.name
-                form.description = item.project.description
-                const users = await getListpUserOfProject(item.project.id)
-                form.userId = users.map((user: any) => user.id)
-              }
-            "
-            ><Setting
-          /></el-icon>
+          <div class="icon">
+            <el-icon
+              style="cursor: pointer"
+              @click.stop="
+                async () => {
+                  state.showForm = true
+                  state.projectId = item.project.id
+                  state.index = index
+                  state.action = 'edit'
+                  form.name = item.project.name
+                  form.description = item.project.description
+                  const users = await getListpUserOfProject(item.project.id)
+                  form.userIds = users.map((user: any) => user.id)
+                }
+              "
+              ><Edit
+            /></el-icon>
+            <el-icon
+              @click.stop="
+                () => {
+                  state.confirm = true
+                  state.projectId = item.project.id
+                }
+              "
+              ><DeleteFilled
+            /></el-icon>
+          </div>
         </div>
       </template>
       <div class="description">
@@ -113,7 +129,7 @@
     center
   >
     <span v-if="state.action === 'edit'">
-      CreatedBy : {{ projects[state.projectId].createdBy.name }}
+      CreatedBy : {{ projects[state.index].createdBy.name }}
     </span>
 
     <el-form :model="form" @submit.prevent>
@@ -126,7 +142,7 @@
         label-position="top"
       >
         <el-select-v2
-          v-model="form.userId"
+          v-model="form.userIds"
           filterable
           :options="users"
           placeholder="Please select"
@@ -158,12 +174,30 @@
           type="primary"
           @click="
             (state.action === 'edit'
-              ? updateProject({ ...form, id: state.projectId })
+              ? updateProject(state.projectId, form)
               : createProject(form)
             ).then(() => clearForm())
           "
         >
           Submit
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
+  <el-dialog v-model="state.confirm" title="Tips" width="500">
+    <span>This is a message</span>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="state.confirm = false">Cancel</el-button>
+        <el-button
+          type="primary"
+          @click.stop="
+            () => {
+              deleteProject(state.projectId).then(() => (state.confirm = false))
+            }
+          "
+        >
+          Confirm
         </el-button>
       </div>
     </template>
@@ -179,6 +213,9 @@
       cursor: pointer;
       display: flex;
       justify-content: space-between;
+      .el-icon {
+        margin-right: 10px;
+      }
     }
 
     .description {
