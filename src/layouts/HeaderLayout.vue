@@ -32,12 +32,5 @@
     padding: 0;
   }
 
-  .container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 7vh;
-    background-color: bisque;
-  }
+
 </style>

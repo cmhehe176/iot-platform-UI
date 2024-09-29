@@ -3,6 +3,7 @@ import HomeView from './pages/HomeView.vue'
 import LoginPage from './pages/LoginPage.vue'
 import Dashboard from './pages/Application/Dashboard.vue'
 import AppLayout from './layouts/AppLayout.vue'
+import AntLayout from './layouts/AntLayout.vue'
 import { useAuthStore } from './stores/auth'
 import { useAuth } from './composables/useAuth'
 import Project from './pages/Application/Project.vue'
@@ -23,19 +24,19 @@ const routes = [
     path: '/dashboard',
     name: 'dashboard',
     component: Dashboard,
-    meta: { layout: AppLayout }
+    meta: { layout: AntLayout }
   },
   {
     path: '/project',
     name: 'project',
     component: Project,
-    meta: { layout: AppLayout }
+    meta: { layout: AntLayout }
   },
   {
     path: '/device',
     name: 'device',
     component: Device,
-    meta: { layout: AppLayout }
+    meta: { layout: AntLayout }
   }
 ]
 

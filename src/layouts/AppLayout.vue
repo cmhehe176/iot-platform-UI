@@ -10,8 +10,8 @@
       icon: 'OfficeBuilding',
       subItems: [
         { label: 'Dashboard', route: 'dashboard', icon: 'Histogram' },
-        { label: 'My Project', route: 'project', icon: 'SetUp' },
-        { label: 'Device', route: 'device', icon: 'Iphone' }
+        { label: 'My Project', route: 'project', icon: 'SetUp' }
+        // { label: 'Device', route: 'device', icon: 'Iphone' }
       ]
     },
     {
